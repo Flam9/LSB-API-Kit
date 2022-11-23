@@ -1,0 +1,32 @@
+{
+  "name": "lsb-api-kit",
+  "version": "0.0.1",
+  "description": "A NodeJS SDK for LandSandBoat",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "node build.js",
+    "start": "npm run build && node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Flam9/LSB-API-Kit.git"
+  },
+  "keywords": [
+    "final fantasy xi",
+    "LandSandBoat"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Flam9/LSB-API-Kit/issues"
+  },
+  "homepage": "https://github.com/Flam9/LSB-API-Kit#readme",
+  "devDependencies": {
+    "esbuild": "^0.15.15"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "mariadb": "^3.0.2"
+  }
+}
