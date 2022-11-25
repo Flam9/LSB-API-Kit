@@ -42,3 +42,23 @@ export interface OnlineCharacter {
   zonename: string;
   ishidden: number;
 }
+
+export type GetIdsByCharNameReturnValue = { accid: number; charid: number };
+
+export interface UnstuckCharacter {
+  accid: number;
+  charid: number;
+  charname: string;
+  pos_zone: number;
+  pos_prevzone: number;
+  pos_rot: number;
+  pos_x: number;
+  pos_y: number;
+  pos_z: number;
+  home_zone: number;
+  home_rot: number;
+  home_x: number;
+  home_y: number;
+  home_z: number;
+  bans: number;
+}

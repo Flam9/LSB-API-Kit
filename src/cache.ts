@@ -20,7 +20,6 @@ class Cache {
     // If it's out of date or not in the cache, update and return the new value
     if (!oldTtl || (oldTtl && now >= oldTtl)) {
       const newValue = await updateFunction();
-      console.log('stale');
 
       if (ttl) {
         this.cache.set(key, newValue, ttl);

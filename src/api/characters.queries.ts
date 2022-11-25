@@ -10,3 +10,12 @@ LEFT JOIN zone_settings AS z ON c.pos_zone = z.zoneid
 ORDER BY c.gmlevel DESC, c.charname ASC;`;
 
 export const getUniquePlayerCountQuery = `SELECT COUNT(DISTINCT(client_addr)) AS count FROM accounts_sessions;`;
+
+export const getIdsByCharNameQuery = `SELECT accid, charid FROM chars WHERE charname = ?`;
+
+export const unstuckCharacterQuery = `SELECT c.accid, c.charid, c.charname, c.home_zone, c.pos_zone, c.pos_prevzone, c.pos_rot, c.pos_x, c.pos_y, c.pos_z, c.home_rot, c.home_x, c.home_y, c.home_z, COUNT(ab.accid) AS bans FROM chars AS c
+LEFT JOIN accounts_banned AS ab ON ab.accid = c.accid
+WHERE c.accid = ? AND c.charid = ?;`;
+
+export const unstuckCharacterUpdateQuery =
+  'UPDATE chars SET pos_zone = ?, pos_prevzone = ?, pos_rot = ?, pos_x = ?, pos_y = ?, pos_z = ? WHERE charid = ?;';

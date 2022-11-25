@@ -60,11 +60,11 @@ const DefaultQueryOptions: QueryOptions = {
  * @param {string} statement - The SQL query to run
  * @param {any[]} values - Values passed into the SQL query, replacing instances of '?'
  */
-export const query = async <T = any[]>(
+export const query = async <T = any>(
   statement: string,
   values: any[] = [],
   options: QueryOptions = DefaultQueryOptions
-): Promise<T[]> => {
+): Promise<T> => {
   return new Promise(async (resolve, reject) => {
     if (!statement) {
       reject('You must provide a statement.');
