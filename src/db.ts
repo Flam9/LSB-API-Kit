@@ -45,6 +45,14 @@ export const closeDbConnection = (onClose: () => void) => {
     .catch((error) => console.log(error));
 };
 
+interface QueryOptions {
+  filterMeta: boolean;
+}
+
+const DefaultQueryOptions: QueryOptions = {
+  filterMeta: true,
+};
+
 /**
  * Helper function to execute queries on the db
  * Handles opening and closing connections to the pool
@@ -52,14 +60,18 @@ export const closeDbConnection = (onClose: () => void) => {
  * @param {string} statement - The SQL query to run
  * @param {any[]} values - Values passed into the SQL query, replacing instances of '?'
  */
-export const query = async <T>(statement: string, values: any[] = []): Promise<T[]> => {
+export const query = async <T = any[]>(
+  statement: string,
+  values: any[] = [],
+  options: QueryOptions = DefaultQueryOptions
+): Promise<T[]> => {
   return new Promise(async (resolve, reject) => {
     if (!statement) {
       reject('You must provide a statement.');
       return;
     }
     if (!pool) {
-      reject('You must initialize a db connection with "initDbConnection"');
+      reject('You must initialize a db connection with "initDbConnection" before calling "query"');
       return;
     }
 
@@ -67,8 +79,11 @@ export const query = async <T>(statement: string, values: any[] = []): Promise<T
     try {
       conn = await pool.getConnection();
       const response = await conn.execute(statement, values);
-      // Too noisy
-      if (response.meta) {
+
+      // The response metadata key gets added automatically and is pretty noisy
+      // This filters it out from the response data
+      // Default: true
+      if (options.filterMeta && response.meta) {
         delete response.meta;
       }
 

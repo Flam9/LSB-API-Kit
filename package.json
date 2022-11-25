@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "dotenv": "^16.0.3",
-    "mariadb": "^3.0.2"
+    "mariadb": "^3.0.2",
+    "node-cache": "^5.1.2"
   }
 }
