@@ -1,3 +1,7 @@
+/**
+ * Functions ported from ArcanusDSP
+ * https://github.com/atom0s/arcanusdsp/blob/4c5ba7346c587f658ae4339e61cc5279501ed339/arcanusdsp-services/services/darkstar/characters.js
+ */
 import { query } from '../db';
 import { cache } from '../cache';
 import { hasGmFlag, getLinkshellHtmlColor } from '../utils/characterUtils';
