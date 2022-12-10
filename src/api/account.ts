@@ -29,8 +29,7 @@ export const getAccountIdByUserName = async (userName: string): Promise<number> 
         }
         return result[0].accId;
       } catch (error) {
-        console.log(error);
-        console.log(`There was an error on getAccountIdByUserName - ${error}`);
+        console.log(`[getAccountIdByUserName error]: `, error);
       }
     }
   );
@@ -67,7 +66,7 @@ export const banPlayerByAccId = async (userName: string) => {
 
         return `Player is banned and does not have an active session`;
       } catch (error) {
-        console.log(`There was an error on banPlayerByAccId - ${error}`);
+        console.log(`[banPlayerByAccId error]: `, error);
       }
     }
   );
@@ -99,7 +98,7 @@ export const unbanPlayerByAccId = async (userName: string) => {
 
         return `Player is not currently Banned`;
       } catch (error) {
-        console.log(`There was an error on unbanPlayerByAccId - ${error}`);
+        console.log(`[unbanPlayerByAccId error]: `, error);
       }
     }
   );
@@ -131,7 +130,7 @@ export const killPlayerSession = async (userName: string) => {
 
         return `Player does not have an active session`;
       } catch (error) {
-        console.log(`There was an error on banPlayerByAccId - ${error}`);
+        console.log(`[killPlayerSession error]: `, error);
       }
     }
   );

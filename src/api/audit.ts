@@ -27,8 +27,7 @@ export const getTotalServerGil = async (): Promise<number> => {
         }
         return result[0].quantity;
       } catch (error) {
-        console.log(error);
-        console.log(`There was an error on getTotalServerGil - ${error}`);
+        console.log(`[getTotalServerGil error]: `, error);
       }
     }
   );
@@ -51,8 +50,7 @@ export const getTopTenAccountsByGil = async (): Promise<TotalGilByAccount[]> => 
 
         return result;
       } catch (error) {
-        console.log(error);
-        console.log(`There was an error on getTopTenAccountsByGil - ${error}`);
+        console.log(`[getTopTenAccountsByGil error]: `, error);
       }
     }
   );
@@ -75,8 +73,7 @@ export const getTopTenCharactersByGil = async (): Promise<TotalGilByAccount[]> =
 
         return result;
       } catch (error) {
-        console.log(error);
-        console.log(`There was an error on getTopTenCharactersByGil - ${error}`);
+        console.log(`[getTopTenCharactersByGil error]: `, error);
       }
     }
   );
