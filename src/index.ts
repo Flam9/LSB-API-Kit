@@ -3,6 +3,7 @@ import * as accounts from './api/accounts';
 import * as audits from './api/audits';
 import * as characters from './api/characters';
 import * as bcnms from './api/bcnms';
+import * as items from './api/items';
 
 const init = async () => {
   initDbConnection();
@@ -28,6 +29,19 @@ const init = async () => {
   // console.log(await bcnms.getBcnmInfo());
   // console.log(await bcnms.getBcnmInfo(2));
 
+  // Item Tests
+  // const item = (await items.getItem('grass thread')).data;
+  // if (item !== null) {
+  //     console.log(await items.getItemDetail(item));
+  //     console.log(await items.getDroppedBy(item));
+  //     console.log(await items.getForSaleAuction(item));
+  //     console.log(await items.getForSaleBazaar(item));
+  //     console.log(await items.getItemRecipe(item));
+  //     console.log(await items.getRecipesUsingItem(item));
+  //     console.log(await items.getSaleHistory(item));
+  // }
+ 
+    
   closeDbConnection(() => {
     console.log('Closed the database connection');
   });
