@@ -10,26 +10,28 @@ const deleteSessionQuery = `DELETE FROM accounts_sessions WHERE accId = ?;`;
  * @returns {string} Returns message on actions taken
  */
 
-const deleteSession = async (searchTerm: string | number): Promise<string> => {
+const deleteSession = async (
+  searchTerm: string | number
+): Promise<{ error: string | null; data: string | null }> => {
   try {
-    const account: Account = await getAccountInfo(searchTerm);
-
-    if (!account) {
-      return `Account not found.`;
+    const { error, data } = await getAccountInfo(searchTerm);
+    if (error) {
+      throw new Error(error);
     }
+
+    if (data === `account not found`) {
+      return { error: null, data: `account not found` };
+    }
+
+    const account: Account = data as Account;
 
     const deleteResult: UpdateQuery = await query(deleteSessionQuery, [account.id]);
     if (deleteResult.affectedRows > 0) {
-      return `All sessions have been deleted.`;
+      return { error: null, data: `all sessions have been deleted` };
     }
-
-    return `No sessions found.`;
+    return { error: null, data: `no sessions found` };
   } catch (error: any) {
-    console.log(
-      '[deleteSession error]: There was an error trying to delete sessions.',
-      error.message
-    );
-    return error.message;
+    return { error: `[deleteSession]: ${error.message}`, data: null };
   }
 };
 

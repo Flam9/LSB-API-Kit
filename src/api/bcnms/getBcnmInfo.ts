@@ -64,7 +64,9 @@ WHERE bi.bcnmId = ?
  * @returns {Array} BCNM info
  */
 
-const getBcnmInfo = async (bcnmId?: number): Promise<Bcnm[]> => {
+const getBcnmInfo = async (
+  bcnmId?: number
+): Promise<{ error: string | null; data: Bcnm[] | null }> => {
   return cache.get(
     {
       key: `getAllBcnms`,
@@ -73,9 +75,9 @@ const getBcnmInfo = async (bcnmId?: number): Promise<Bcnm[]> => {
     async () => {
       try {
         const results: Bcnm[] = await query(bcnmId ? getBcnmById : getAllBcnmsQuery, [bcnmId]);
-        return results;
-      } catch (error) {
-        console.log('[getAllBcnms error]: There was an error trying to get all bcnms.', error);
+        return { error: null, data: results };
+      } catch (error: any) {
+        return { error: `[getAllBcnms]: ${error.message}`, data: null };
       }
     }
   );

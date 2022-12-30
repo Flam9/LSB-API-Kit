@@ -9,7 +9,10 @@ const getUniqueCharacterCountQuery = `SELECT COUNT(DISTINCT(client_addr)) AS cou
  *
  * @returns {number} - the number of unique Characters online
  */
-export const getUniqueCharacterCount = async (): Promise<number> => {
+export const getUniqueCharacterCount = async (): Promise<{
+  error: string | null;
+  data: number;
+}> => {
   return cache.get(
     {
       key: 'getUniqueCharacterCount',
@@ -19,11 +22,13 @@ export const getUniqueCharacterCount = async (): Promise<number> => {
       try {
         // Query the database for the online characters..
         const results: { count: number }[] = await query(getUniqueCharacterCountQuery);
-        return results[0].count;
-      } catch (error) {
-        console.log('[getUniqueCharacterCount error]: ', error);
+        if (results[0] === undefined) {
+          return { error: null, data: 0 };
+        }
+        return { error: null, data: results[0].count };
+      } catch (error: any) {
+        return { error: `[getUniqueCharacterCount]: ${error.message}`, data: null };
       }
-      return 0;
     }
   );
 };

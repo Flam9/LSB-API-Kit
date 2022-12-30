@@ -27,7 +27,9 @@ limit ?;
  * @returns {Array<>} list of characters
  */
 
-const getTopGilByAccount = async (limit: number): Promise<TotalGilByAccount[]> => {
+const getTopGilByAccount = async (
+  limit: number
+): Promise<{ error: string | null; data: TotalGilByAccount[] | null }> => {
   return cache.get(
     {
       key: `getTopGilByAccount:${limit}`,
@@ -36,9 +38,9 @@ const getTopGilByAccount = async (limit: number): Promise<TotalGilByAccount[]> =
     async () => {
       try {
         const result: TotalGilByAccount[] = await query(getTopGilByAccountQuery, [limit]);
-        return result;
-      } catch (error) {
-        console.log(`[getTopGilByAccount error]: `, error);
+        return { error: null, data: result };
+      } catch (error: any) {
+        return { error: `[getTopGilByAccount]: ${error.message}`, data: null };
       }
     }
   );

@@ -15,7 +15,10 @@ const deleteSessionByAccIdQuery = `DELETE FROM accounts_sessions WHERE accid = ?
  * @returns {string} Returns message on actions taken
  */
 
-const updateStatus = async (searchTerm: string | number, status: Status): Promise<string> => {
+const updateStatus = async (
+  searchTerm: string | number,
+  status: Status
+): Promise<{ error: string | null; data: string | null }> => {
   return cache.get(
     {
       key: `updateStatus_${searchTerm}`,
@@ -24,14 +27,18 @@ const updateStatus = async (searchTerm: string | number, status: Status): Promis
     async () => {
       try {
         const statusId = status === 'Active' ? 1 : 2;
-        const account: Account = await getAccountInfo(searchTerm);
-
-        if (!account) {
-          return `Account not found.`;
+        const { error, data } = await getAccountInfo(searchTerm);
+        if (error) {
+          throw new Error(error);
         }
 
+        if (data === `account not found`) {
+          return { error: null, data: `account not found` };
+        }
+        const account: Account = data as Account;
+
         if (account.status === statusId) {
-          return `Account is already ${status}.`;
+          return { error: null, data: `account is already ${status}` };
         }
 
         const updateStatus: UpdateQuery = await query(updateStatusQuery, [statusId, account.id]);
@@ -39,17 +46,15 @@ const updateStatus = async (searchTerm: string | number, status: Status): Promis
         if (status === 'Banned' && updateStatus.affectedRows > 0) {
           const deleteResult: UpdateQuery = await query(deleteSessionByAccIdQuery, [account.id]);
           if (deleteResult.affectedRows > 0) {
-            return `Account has been banned and all sessions have been deleted.`;
+            return {
+              error: null,
+              data: `account has been banned and all sessions have been deleted`,
+            };
           }
         }
-
-        return `Account status has been updated to ${status}.`;
+        return { error: null, data: `account status has been updated to ${status}` };
       } catch (error: any) {
-        console.log(
-          '[updateStatus error]: There was an error trying to update account status.',
-          error.message
-        );
-        return error.message;
+        return { error: `[updateStatus]: ${error.message}`, data: null };
       }
     }
   );

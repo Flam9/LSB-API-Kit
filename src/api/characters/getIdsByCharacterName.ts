@@ -1,7 +1,7 @@
 import { query } from '../../db';
 import { cache } from '../../cache';
 
-type CharacterIds = { accid: number; charid: number };
+export type CharacterIds = { accid: number; charid: number };
 
 const getIdsByCharacterNameQuery = `SELECT accid, charid FROM chars WHERE charname = ?`;
 
@@ -11,7 +11,9 @@ const getIdsByCharacterNameQuery = `SELECT accid, charid FROM chars WHERE charna
  * @param {string} characterName - character name to search by
  * @returns {object} - the account id and character id
  */
-export const getIdsByCharacterName = async (characterName: string): Promise<CharacterIds> => {
+export const getIdsByCharacterName = async (
+  characterName: string
+): Promise<{ error: string | null; data: CharacterIds | null }> => {
   return cache.get(
     {
       key: `getIdsByCharacterName_${characterName}`,
@@ -20,16 +22,13 @@ export const getIdsByCharacterName = async (characterName: string): Promise<Char
     async () => {
       try {
         const results = await query<CharacterIds[]>(getIdsByCharacterNameQuery, [characterName]);
-        return results[0];
-      } catch (error) {
-        console.log(
-          '[unstuckCharacter error]: There was an error trying to free your character.',
-          error
-        );
+        if (results[0]) {
+          return { error: null, data: results[0] };
+        }
+        return { error: null, data: {accid: -1, charid: -1} };
+      } catch (error: any) {
+        return { error: `[getIdsByCharacterName]: ${error.message}`, data: null };
       }
-
-      // Error or none found
-      return { accid: -1, charid: -1 };
     }
   );
 };

@@ -2,6 +2,7 @@ import { query } from '../../db';
 import { cache } from '../../cache';
 import getIdsByCharacterName from './getIdsByCharacterName';
 import type { UpdateQuery } from '../../types';
+import type { CharacterIds } from './getIdsByCharacterName';
 
 interface UnstuckCharacter {
   accid: number;
@@ -34,7 +35,9 @@ const unstuckCharacterUpdateQuery =
  * @param {string} charName - The character name to free.
  * @returns {boolean} - whether the character was freed or not
  */
-export const unstuckCharacter = async (charName: string): Promise<boolean> => {
+export const unstuckCharacter = async (
+  charName: string
+): Promise<{ error: string | null; data: boolean | null }> => {
   return cache.get(
     {
       key: `unstuckCharacter_${charName}`,
@@ -43,11 +46,15 @@ export const unstuckCharacter = async (charName: string): Promise<boolean> => {
     async () => {
       try {
         // Get the accid and charid for the provided char name
-        const { accid, charid } = await getIdsByCharacterName(charName);
+        const { error, data } = await getIdsByCharacterName(charName);
+        if (error) {
+          throw new Error(error);
+        }
+
+        const { accid, charid } = data as CharacterIds;
 
         if (accid === -1 || charid === -1) {
-          console.log('No character found with this name.');
-          return false;
+          return { error: null, data: false };
         }
 
         // Get the current character position
@@ -55,8 +62,7 @@ export const unstuckCharacter = async (charName: string): Promise<boolean> => {
 
         // Ensure the character is not in jail..
         if (result.pos_zone === 131) {
-          console.log('Cannot free your character; you are in jail.');
-          return false;
+          return { error: null, data: false };
         }
 
         // Void zone fix.. (loldspbug)
@@ -77,18 +83,14 @@ export const unstuckCharacter = async (charName: string): Promise<boolean> => {
         ]);
 
         if (updateResult.affectedRows > 0) {
-          return true;
+          return { error: null, data: true };
         }
-      } catch (error) {
-        console.log(
-          '[unstuckCharacter error]: There was an error trying to free your character.',
-          error
-        );
+        return { error: null, data: false };
+      } catch (error: any) {
+        return { error: `[unstuckCharacter]: ${error.message}`, data: null };
       }
-      return false;
     }
   );
 };
-
 
 export default unstuckCharacter;

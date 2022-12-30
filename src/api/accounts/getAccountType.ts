@@ -27,17 +27,19 @@ WHERE status = 1 AND login = ? AND password = PASSWORD(?);
  * @returns {object} Account type
  */
 
-const getAccountType = async (login: string, password: string): Promise<AccountType | string> => {
+const getAccountType = async (
+  login: string,
+  password: string
+): Promise<{ error: string | null; data: AccountType | string | null }> => {
   try {
     const results: AccountType[] = await query(getAccountTypeQuery, [login, password]);
 
     if (results[0]) {
-      return results[0];
+      return { error: null, data: results[0] };
     }
-    return 'Account not found.';
+    return { error: null, data: `Account not found.` };
   } catch (error: any) {
-    console.log('[getAccountType error]: There was an error trying to get account type.', error);
-    return error.message;
+    return { error: `[getAccountType]: ${error.message}`, data: null };
   }
 };
 

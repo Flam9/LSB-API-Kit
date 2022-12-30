@@ -82,7 +82,6 @@ const getOnlineCharacters = async (limit: number): Promise<OnlineCharacter[]> =>
               character.ishidden === 0 ||
               // Skip GMs that are anon (/anon)
               (character.gmlevel > 0 && (character.nameflags & 0x00001000) !== 0x00001000)
-
             );
           })
           .map((character) => {
@@ -120,9 +119,9 @@ const getOnlineCharacters = async (limit: number): Promise<OnlineCharacter[]> =>
             }
             return 1;
           });
-        return formattedOnlineCharacters;
-      } catch (error) {
-        console.log('[getOnlineCharacters error]: ', error);
+        return { error: null, data: formattedOnlineCharacters };
+      } catch (error: any) {
+        return { error: `[getOnlineCharacters error]: ${error.message}`, data: null };
       }
     }
   );

@@ -6,13 +6,12 @@ import * as bcnms from './api/bcnms';
 
 const init = async () => {
   initDbConnection();
-
   // Accounts Tests
   // console.log(await accounts.getAccountInfo('Bob'));
-  // console.log(await accounts.getAccountInfo(1004));
-  // console.log(await accounts.updateStatus('Testy', 'Active'));
-  // console.log(await accounts.deleteSession('Test'));
-  // console.log(await accounts.getAccountType('Eit','Eitd'));
+  // console.log(await accounts.getAccountInfo(1000));
+  // console.log(await accounts.updateStatus('Eit', 'Active'));
+  // console.log(await accounts.deleteSession('Eit'));
+  // console.log(await accounts.getAccountType('Eit','Eit'));
 
   // Audit Tests
   // console.log(await audits.getTotalServerGil());
@@ -20,9 +19,10 @@ const init = async () => {
   // console.log(await audits.getTopGilByCharacter(2));
 
   // Character Tests
+  // console.log(await characters.getIdsByCharacterName('Catd'));
   // console.log(await characters.getOnlineCharacters(1));
   // console.log(await characters.getUniqueCharacterCount());
-  // console.log(await characters.unstuckCharacter('Atest'));
+  // console.log(await characters.unstuckCharacter('Cat'));
 
   // BCNM Tests
   // console.log(await bcnms.getBcnmInfo());

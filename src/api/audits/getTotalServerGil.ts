@@ -17,7 +17,7 @@ where a.status = 1;
  * @returns {number} Total Gil
  */
 
-const getTotalServerGil = async (): Promise<number> => {
+const getTotalServerGil = async (): Promise<{ error: string | null; data: number | null }> => {
   return cache.get(
     {
       key: `getTotalServerGil`,
@@ -27,11 +27,11 @@ const getTotalServerGil = async (): Promise<number> => {
       try {
         const result: TotalGil[] = await query(getTotalServerGilQuery);
         if (result[0] === undefined) {
-          return 0;
+          return { error: null, data: 0 };
         }
-        return result[0].quantity;
-      } catch (error) {
-        console.log(`[getTotalServerGil error]: `, error);
+        return { error: null, data: result[0].quantity };
+      } catch (error: any) {
+        return { error: `[getTotalServerGil]: ${error.message}`, data: null };
       }
     }
   );
