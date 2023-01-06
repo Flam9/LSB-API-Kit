@@ -10,6 +10,15 @@ const getItemDetailsQueries: string[] = [
 	'SELECT itemid, name, skill, subskill, dmgtype, hit, delay, dmg, unlock_points FROM item_weapon WHERE itemid = ?;'
 ];
 
+const execItemQuery = async function (sql: string, item: Item): Promise<Item | null> {
+    const results: Item[] = await query(sql, [item.itemid]);
+    if (results[0]) {
+        const resultItem: Item = { ...item, ...results[0] };
+        return resultItem;
+    }
+    return null;
+}
+
 const getItemDetail = async (item: Item): Promise<{ error: string | null, data: Item | null }> => {
 	return cache.get({
 		key: `getItemDetail_${item.itemid}`,
@@ -35,15 +44,6 @@ const getItemDetail = async (item: Item): Promise<{ error: string | null, data: 
             return { error: `[getItemDetail error]: ${error.message}`, data: null };
         }
 	});
-}
-
-const execItemQuery = async function(sql: string, item: Item): Promise<Item | null> {
-    const results: Item[] = await query(sql, [item.itemid]);
-    if (results[0]) {
-        const resultItem: Item = { ...item, ...results[0] };
-        return resultItem;
-    }
-    return null;
 }
 
 const mergeItemData = function (items: Item[]): Item {

@@ -34,7 +34,7 @@ const getDroppedBy = async (item: Item): Promise<{ error: string | null; data: M
             }
             return { error: null, data: null };
         } catch (error: any) {
-            return { error: `[getSaleForSaleAuction error]: ${error.message}`, data: null };
+            return { error: `[getDroppedBy error]: ${error.message}`, data: null };
         }
     });
 }

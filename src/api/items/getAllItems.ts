@@ -4,6 +4,14 @@ import { Item } from './getItem';
 
 const itemTables = ['item_armor', 'item_basic', 'item_furnishing', 'item_usable', 'item_weapon'];
 
+const execItemsQuery = async function (sql: string): Promise<Item[] | null> {
+    const results: Item[] = await query(sql);
+    if (results[0]) {
+        return results;
+    }
+    return null;
+}
+
 const getAllItems = async (): Promise<{ error: string | null, data: Item[] | null }> => {
     return cache.get({
         key: 'getAllItems',
@@ -27,14 +35,6 @@ const getAllItems = async (): Promise<{ error: string | null, data: Item[] | nul
             return { error: `[getAllItems error]: ${error.message}`, data: null }
         }
     });
-}
-
-const execItemsQuery = async function (sql: string): Promise<Item[] | null> {
-    const results: Item[] = await query(sql);
-    if (results[0]) {
-        return results;
-    }
-    return null;
 }
 
 export default getAllItems;
