@@ -4,6 +4,7 @@ import * as audits from './api/audits';
 import * as characters from './api/characters';
 import * as bcnms from './api/bcnms';
 import * as items from './api/items';
+import * as monsters from './api/monsters';
 
 const init = async () => {
   initDbConnection();
@@ -40,8 +41,12 @@ const init = async () => {
   //     console.log(await items.getRecipesUsingItem(item));
   //     console.log(await items.getSaleHistory(item));
   // }
- 
-    
+
+  // Monster Tests
+  // const monster = (await monsters.getMonster(16781323)).data;
+  // console.log(await monsters.getMonsterDetail(monster[0]));
+  // console.log(await monsters.getMonsterDrops(monster[0]));
+
   closeDbConnection(() => {
     console.log('Closed the database connection');
   });
